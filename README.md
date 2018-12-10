@@ -84,7 +84,7 @@ Here we use a N-channel power MOSFET as the switch which is on when grid is posi
 
 So this modification goes with the SW_Hook and the SW_Unlock (OR and the D0 signal path, see note below).
 
-NOTE: for the monitor of someone visits, disconnect the D0 signal and connect it to MCU, and make the D0 signal path stay active all the time.(This is reserved for furthur experiment because it seems that when D0 signal path is always active, the system would be unable to function when someone enter any the door number, if this is confirmed, we have to use another MOSFET to control it just like the SW_Hook and the SW_Unlock)
+NOTE: for the monitor of someone visits, disconnect the D0 signal and connect it to MCU, and make the D0 signal path stay active all the time(which makes we can hear the talking all the time).(This is reserved for furthur experiment because it seems that when D0 signal path is always active, the system would be unable to function when someone enter any the door number, if this is confirmed, we can only monitor this signal and just leave it alone)
 
 MCU we choose the STM8S103F module which is cost effective and easy to use.
 
