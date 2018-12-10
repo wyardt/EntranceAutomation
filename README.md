@@ -73,10 +73,31 @@ And here is a way of decoding the knocking signal on the MCU:
 record the 1.5 times the width of the sync head and use it as the mark. when the width of the upcoming signal is less than the mark, a '1' is received otherwise is a '0'.
 And of course if we have another HT12D then we could emit this procedure by just monitoring the D0 signal of this HT12D chip.
 
-# Hardware scheme
+# Hardware Scheme
 What we have now is the subsystem itself, and we plan to take control of the two main control switches of the subsystem and what's more we don't want to modify the original functions of the subsystem, which is to say that, we could use the subsystem as what it used to be after even we have modified the subsystem by our will.
 
 For the sake of simplicity, we choose to use modules which are off the rack. All we have to do is to redirect the control pathes onto a SPDT and use a MCU to decide which input should appear on the control path.
+
+From the figure below it's the sketch of the modification. On the left side is the original path of the two switches, on the right side is the modification scheme.(S2 is a MUX of 2, default state is connect 3 to 2 which makes the path is the same with the original scheme)
+Here we use a N-channel power MOSFET as the switch which is on when grid is positive.
+![switch_modification](resource/Switch_Control.jpg)
+
+So this modification goes with the SW_Hook and the SW_Unlock (OR and the D0 signal path, see note below).
+
+NOTE: for the monitor of someone visits, disconnect the D0 signal and connect it to MCU, and make the D0 signal path stay active all the time.(This is reserved for furthur experiment because it seems that when D0 signal path is always active, the system would be unable to function when someone enter any the door number, if this is confirmed, we have to use another MOSFET to control it just like the SW_Hook and the SW_Unlock)
+
+MCU we choose the STM8S103F module which is cost effective and easy to use.
+
+Below is the total modules we use at this scheme.
+
+# Software Scheme
+All we have to do is to control the MOSFET and the MUX when the D0 is detected active.
+So here is the scheme:
+1. Monitor the D0 of HT12D
+2. If D0 is active, enable the SW_Hook control signal and go to 3, otherwise return to 1.
+3. If Test Key is pressed, enable the SW_Unlock control signal and go to 4, otherwise stay in 3.
+4. Wait until D0 is no longer active and go to 1, otherwise stay in 4.
+
 
 
 
