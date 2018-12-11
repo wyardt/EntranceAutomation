@@ -92,13 +92,12 @@ Below is the total modules we use at this scheme.
 
 # Software Scheme
 All we have to do is to control the MOSFET and the MUX when the D0 is detected active.
-So here is the scheme:
-1. Monitor the D0 of HT12D
-2. If D0 is active, enable the SW_Hook control signal and go to 3, otherwise return to 1.
-3. If Test Key is pressed, enable the SW_Unlock control signal and go to 4, otherwise stay in 3.
-4. Wait until D0 is no longer active and go to 1, otherwise stay in 4.
+So here is the scheme of unlock the door with a single button:
+1. Monitor the D0 of HT12D, if D0 is active, enable the SW_Hook control signal and go to 2, otherwise return to 1.
+2. If Test Key is pressed, enable the SW_Unlock control signal and go to 3, otherwise stay in 2.
+3. Wait until D0 is no longer active and go to 1, otherwise stay in 3.
 
-
+Then varies functions can be deprived from the scheme above, such as control it through my computer or my mobile phone, so before all that might happen, let's build it up bit by bit.
 
 
 
