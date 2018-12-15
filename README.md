@@ -76,11 +76,14 @@ And of course if we have another HT12D then we could emit this procedure by just
 # Hardware Scheme
 What we have now is the subsystem itself, and we plan to take control of the two main control switches of the subsystem and what's more we don't want to modify the original functions of the subsystem, which is to say that, we could use the subsystem as what it used to be after even we have modified the subsystem by our will.
 
-For the sake of simplicity, we choose to use modules which are off the rack. All we have to do is to redirect the control pathes onto a SPDT and use a MCU to decide which input should appear on the control path.
+For the sake of simplicity, We choose to use modules which are off the rack. All we have to do is to redirect the control pathes onto a SPDT and use a MCU to decide which input should appear on the control path.
 
 From the figure below it's the sketch of the modification. On the left side is the original path of the two switches, on the right side is the modification scheme.(S2 is a MUX of 2, default state is connect 3 to 2 which makes the path is the same with the original scheme)
 Here we use a N-channel power MOSFET as the switch which is on when grid is positive.
 ![switch_modification](resource/Switch_Control.jpg)
+
+Wait a minute, we have another scheme that omits the SPDT and it seems better. Look at the picture below.
+![switch_modification](resource/Switch_Control_BETTER.png)
 
 So this modification goes with the SW_Hook and the SW_Unlock (OR and the D0 signal path, see note below).
 
