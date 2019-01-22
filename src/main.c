@@ -25,6 +25,7 @@
 #include "main.h"
 
 bool someone_is_knocking = FALSE;
+bool automate_unlock_once = FALSE;
 
 /* Private defines -----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -57,25 +58,33 @@ void main(void)
   enableInterrupts();
 
   Flash_LED(10);
+
+  halt();
   
   while (1)
   {
-    if (someone_is_knocking == TRUE)
-    {
-    	GPIO_WriteHigh(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* pick up */
-			Delay(0xffff);
-			GPIO_WriteHigh(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* open the gate */
-			someone_is_knocking = FALSE;	/* open gate complete */
-			Flash_LED(20);
-			halt();
-    }
-    
+  	/* if (automate_unlock_once == TRUE) */ /* under any condition */
+  	{
+  		automate_unlock_once = FALSE;
+  		
+	    if (someone_is_knocking == TRUE)
+	    {
+	    	GPIO_WriteHigh(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* pick up */
+				Delay(0xffff);
+				GPIO_WriteHigh(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* open the gate */
+				Delay(0xffff);
+				GPIO_WriteLow(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* automate hang up */
+				someone_is_knocking = FALSE;	/* open gate complete */
+				Flash_LED(20);
+				halt();
+	    }
+	  }
   }
   
 }
 
 /**
-  * @brief  Configure system clock to run at 16Mhz
+  * @brief  Configure system clock to run at 16Mhz, default is 2MHz after reset
   * @param  None
   * @retval None
   */
@@ -99,6 +108,9 @@ static void GPIO_Config(void)
 	/* Initialize I/Os in Output Mode for control signals */
 	GPIO_Init(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
 	GPIO_Init(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
+
+	/* Initialize I/Os in Input Mode for local control button */
+	GPIO_Init(LOCAL_BUTTON_GPIO_PORT, LOCAL_BUTTON_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
 	
   /* Initialize I/O in Input Mode with Interrupt for knocking signal detect */
   GPIO_Init(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS, GPIO_MODE_IN_FL_IT);

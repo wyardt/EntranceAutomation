@@ -39,6 +39,8 @@
 #define PICKUP_GPIO_PINS  (GPIO_PIN_1)
 #define UNLOCK_GPIO_PORT  (GPIOD)
 #define UNLOCK_GPIO_PINS  (GPIO_PIN_2)
+#define LOCAL_BUTTON_GPIO_PORT  (GPIOA)
+#define LOCAL_BUTTON_GPIO_PINS  (GPIO_PIN_2)
 
 
 
@@ -47,6 +49,7 @@
 
 /* Public functions ----------------------------------------------------------*/
 extern bool someone_is_knocking;
+extern bool automate_unlock_once;
 
 #endif /* __MAIN_H */
 

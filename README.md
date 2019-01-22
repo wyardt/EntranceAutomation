@@ -61,12 +61,17 @@ which in total 13 data signals. And "001" represents '1', "011" is '0'.
 For HT12D, if 3 out of 4 times of code matched, VT output high(which is not used in this subsystem), D0-D3 will be latched(D0 is used as the control signal in this subsystem), till Din is no longer active.
 
 address set on board is 0101 1011 as it could be seen from PCB:
-![address setting on PCB](resource/PCB_front.jpeg)
-![address setting on PCB](resource/PCB_back.jpeg)
+<div align=center>
+<img src="resource/PCB_front.jpeg" alt="address setting on PCB" width=256 height=256>
+
+<img src="resource/PCB_back.jpeg" alt="address setting on PC" width=256 height=256>
+</div>
 
 wave measured is:
 1(guiding code) 0101 1011 1100 as it could be seen from oscilloscope:
-![someone knock on 502 door](resource/oscilloscope_wave.jpeg)
+<div align=center>
+<img src="resource/oscilloscope_wave.jpeg" alt="someone knock on 502 door" width=256 height=256>
+</div>
 and my door number is 502 so it's matched correctly.
 
 And here is a way of decoding the knocking signal on the MCU:
@@ -80,10 +85,14 @@ For the sake of simplicity, We choose to use modules which are off the rack. All
 
 From the figure below it's the sketch of the modification. On the left side is the original path of the two switches, on the right side is the modification scheme.(S2 is a MUX of 2, default state is connect 3 to 2 which makes the path is the same with the original scheme)
 Here we use a N-channel power MOSFET as the switch which is on when grid is positive.
-![switch_modification](resource/Switch_Control.jpg)
+<div align=center>
+<img src="resource/Switch_Control.jpg" alt="switch_modification" width=384 height=384>
+</div>
 
 Wait a minute, we have another scheme that omits the SPDT and it seems better. Look at the picture below.
-![switch_modification](resource/Switch_Control_BETTER.png)
+<div align=center>
+<img src="resource/Switch_Control_BETTER.png" alt="switch_modification" width=384 height=384>
+</div>
 
 So this modification goes with the SW_Hook and the SW_Unlock (OR and the D0 signal path, see note below).
 
@@ -101,6 +110,7 @@ So here is the scheme of unlock the door with a single button:
 3. Wait until D0 is no longer active and go to 1, otherwise stay in 3.
 
 Then varies functions can be deprived from the scheme above, such as control it through my computer or my mobile phone, so before all that might happen, let's build it up bit by bit.
+
 
 
 
