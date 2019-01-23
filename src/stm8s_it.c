@@ -112,11 +112,12 @@ INTERRUPT_HANDLER(EXTI_PORTA_IRQHandler, 3)
   /* In order to detect unexpected events during development,
      it is recommended to set a breakpoint on the following instruction.
   */
-  if ((GPIO_ReadInputPin(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS) == SET)
+
+  if (GPIO_ReadInputPin(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS) != RESET)
   {
     someone_is_knocking = TRUE;
   }
-  if ((GPIO_ReadInputPin(LOCAL_BUTTON_GPIO_PORT, LOCAL_BUTTON_GPIO_PINS) == SET)
+  if (GPIO_ReadInputPin(LOCAL_BUTTON_GPIO_PORT, LOCAL_BUTTON_GPIO_PINS) != RESET)
   {
     automate_unlock_once = TRUE;
   }

@@ -32,7 +32,7 @@ bool automate_unlock_once = FALSE;
 /* Private functions ---------------------------------------------------------*/
 static void CLK_Config(void);
 static void GPIO_Config(void);
-static void Flash_LED(int16_t flash_times);
+static void Flash_LED(uint16_t flash_times);
 
 void Delay(uint16_t nCount)
 {
@@ -76,9 +76,10 @@ void main(void)
 				GPIO_WriteLow(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* automate hang up */
 				someone_is_knocking = FALSE;	/* open gate complete */
 				Flash_LED(20);
-				halt();
+				
 	    }
 	  }
+          halt();
   }
   
 }
@@ -113,7 +114,7 @@ static void GPIO_Config(void)
 	GPIO_Init(LOCAL_BUTTON_GPIO_PORT, LOCAL_BUTTON_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
 	
   /* Initialize I/O in Input Mode with Interrupt for knocking signal detect */
-  GPIO_Init(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS, GPIO_MODE_IN_FL_IT);
+  GPIO_Init(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS, GPIO_MODE_IN_PU_IT);
 
 	GPIO_WriteLow(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* default state is hooked */
   GPIO_WriteLow(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* default is no action to open the gate */
@@ -124,12 +125,13 @@ static void GPIO_Config(void)
   * @param  None
   * @retval None
   */
-static void Flash_LED(int16_t flash_times)
+static void Flash_LED(uint16_t flash_times)
 {
+  uint16_t i;
 	/* LED flashes to indicate successful initiation */
-  for (flash_times = 0; flash_times < 20; flash_times--)
+  for (i = 0; i < flash_times; i++)
   {
-		GPIO_WriteHigh(LED_GPIO_PORT, LED_GPIO_PINS);
+		GPIO_WriteReverse(LED_GPIO_PORT, LED_GPIO_PINS);
 		Delay(0xffff);
   }
 

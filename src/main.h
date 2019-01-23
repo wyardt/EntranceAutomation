@@ -31,7 +31,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define LED_GPIO_PORT  (GPIOE)
+#define LED_GPIO_PORT  (GPIOB)
 #define LED_GPIO_PINS  (GPIO_PIN_5)
 #define KNOCK_GPIO_PORT  (GPIOA)
 #define KNOCK_GPIO_PINS  (GPIO_PIN_1)
