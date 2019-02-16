@@ -33,6 +33,7 @@ bool automate_unlock_once = FALSE;
 static void CLK_Config(void);
 static void GPIO_Config(void);
 static void Flash_LED(uint16_t flash_times);
+static void TurnOff_LED(void);
 
 void Delay(uint16_t nCount)
 {
@@ -58,8 +59,8 @@ void main(void)
   enableInterrupts();
 
   Flash_LED(10);
-
-  halt();
+  TurnOff_LED();
+  wfi();
   
   while (1)
   {
@@ -69,17 +70,19 @@ void main(void)
   		
 	    if (someone_is_knocking == TRUE)
 	    {
+	    	Flash_LED(200);
 	    	GPIO_WriteHigh(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* pick up */
-				Delay(0xffff);
+				Flash_LED(20);
 				GPIO_WriteHigh(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* open the gate */
-				Delay(0xffff);
+				Flash_LED(20);
+				GPIO_WriteLow(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* release the button */
+				Flash_LED(20);
 				GPIO_WriteLow(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* automate hang up */
 				someone_is_knocking = FALSE;	/* open gate complete */
-				Flash_LED(20);
-				
+				Flash_LED(5);
 	    }
 	  }
-          halt();
+          wfi();
   }
   
 }
@@ -93,7 +96,7 @@ static void CLK_Config(void)
 {
     /* Initialization of the clock */
     /* Clock divider to HSI/1 */
-    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV2);
 }
 
 /**
@@ -111,10 +114,10 @@ static void GPIO_Config(void)
 	GPIO_Init(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
 
 	/* Initialize I/Os in Input Mode for local control button */
-	GPIO_Init(LOCAL_BUTTON_GPIO_PORT, LOCAL_BUTTON_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
+	GPIO_Init(LOCAL_BUTTON_GPIO_PORT, LOCAL_BUTTON_GPIO_PINS, GPIO_MODE_IN_FL_IT);
 	
   /* Initialize I/O in Input Mode with Interrupt for knocking signal detect */
-  GPIO_Init(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS, GPIO_MODE_IN_PU_IT);
+  GPIO_Init(KNOCK_GPIO_PORT, KNOCK_GPIO_PINS, GPIO_MODE_IN_FL_IT);
 
 	GPIO_WriteLow(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* default state is hooked */
   GPIO_WriteLow(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* default is no action to open the gate */
@@ -135,6 +138,16 @@ static void Flash_LED(uint16_t flash_times)
 		Delay(0xffff);
   }
 
+}
+
+/**
+  * @brief  Turn off the LED
+  * @param  None
+  * @retval None
+  */
+static void TurnOff_LED(void)
+{
+	GPIO_WriteHigh(LED_GPIO_PORT, LED_GPIO_PINS);
 }
 
 #ifdef USE_FULL_ASSERT
