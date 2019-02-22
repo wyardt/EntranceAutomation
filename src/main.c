@@ -70,7 +70,7 @@ void main(void)
   		
 	    if (someone_is_knocking == TRUE)
 	    {
-	    	Flash_LED(200);
+	    	Flash_LED(50);
 	    	GPIO_WriteHigh(PICKUP_GPIO_PORT, PICKUP_GPIO_PINS);	/* pick up */
 				Flash_LED(20);
 				GPIO_WriteHigh(UNLOCK_GPIO_PORT, UNLOCK_GPIO_PINS);	/* open the gate */
