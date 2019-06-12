@@ -100,7 +100,7 @@ NOTE: for the monitor of someone visits, disconnect the D0 signal and connect it
 
 MCU we choose the STM8S103F module which is cost effective and easy to use.
 
-Below is the total modules we use at this scheme.
+What is said above are the overall modules we use with this scheme.
 
 # Software Scheme
 All we have to do is to control the MOSFET and the MUX when the D0 is detected active.
